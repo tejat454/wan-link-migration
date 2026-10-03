@@ -1,0 +1,294 @@
+﻿DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#sh ip arp vrf DP                    
+Protocol  Address          Age (min)  Hardware Addr   Type   Interface
+Internet  172.30.7.1              0   Incomplete      ARPA   
+Internet  172.30.7.2              -   54a2.7427.d591  ARPA   Port-channel2.3127
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#sh ip arp vrf DSG-COMTRUST          
+Protocol  Address          Age (min)  Hardware Addr   Type   Interface
+Internet  10.8.2.129             60   001c.7f48.0a6f  ARPA   Port-channel1.514
+Internet  10.8.2.130              8   001c.7f47.eca5  ARPA   Port-channel1.514
+Internet  10.8.2.131              0   001c.7f47.eca5  ARPA   Port-channel1.514
+Internet  10.8.2.133              -   54a2.7427.d590  ARPA   Port-channel1.514
+Internet  172.16.192.41         119   e4aa.5d9b.8ca1  ARPA   Port-channel2.3108
+Internet  172.16.192.42           -   54a2.7427.d591  ARPA   Port-channel2.3108
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#sh running-config | sec DSG-COMTRUST
+ip vrf DSG-COMTRUST
+ description ### VRF for Etisalat Comtrust DSG ###
+ rd 64570:514
+ ip vrf forwarding DSG-COMTRUST
+ ip vrf forwarding DSG-COMTRUST
+ address-family ipv4 vrf DSG-COMTRUST
+  neighbor 172.16.192.41 remote-as 64518
+  neighbor 172.16.192.41 activate
+  neighbor 172.16.192.41 soft-reconfiguration inbound
+  neighbor 172.16.192.41 route-map COMTRUST-DSG-Rcvd-Rts in
+ip nat pool DSG-COMTRUST-SOURCE 172.16.192.45 172.16.192.45 prefix-length 28
+ip nat inside source static 172.24.12.12 172.16.192.46 vrf DSG-COMTRUST
+ip nat inside source list DSG-COMTRUST pool DSG-COMTRUST-SOURCE vrf DSG-COMTRUST overload
+ip route vrf DSG-COMTRUST 10.4.6.174 255.255.255.255 10.8.2.131 name MFT_DMZ_1
+ip route vrf DSG-COMTRUST 10.4.6.175 255.255.255.255 10.8.2.131 name MFT_DMZ_2
+ip route vrf DSG-COMTRUST 172.21.12.12 255.255.255.255 10.8.2.131 name Towards-Real1DIC-For-COMTRUST
+ip route vrf DSG-COMTRUST 172.24.12.12 255.255.255.255 10.8.2.131 name Towards-Real2DOZ
+ip route vrf DSG-COMTRUST 172.24.18.208 255.255.255.255 10.8.2.131 name Towards-FTP-For-COMTRUST
+ip access-list extended DSG-COMTRUST
+ permit ip host 172.24.18.208 any
+ permit ip host 10.4.6.174 any
+ permit ip host 10.4.6.175 any
+ deny   ip any any log
+ip access-list extended DSG-COMTRUST-NAT
+ permit ip host 195.229.86.134 host 172.16.192.46
+ permit ip host 195.229.86.134 host 172.24.12.12
+ deny   ip any any log
+ vrf DSG-COMTRUST
+ vrf DSG-COMTRUST
+ tag *** path-jitter for DSG-COMTRUST ***
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#!!
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#sh ip bgp all sum
+DOZ-MB-EXT-NEW-RTR01#sh ip bgp all summary 
+For address family: IPv4 Unicast
+BGP router identifier 172.31.5.101, local AS number 64570
+BGP table version is 383, main routing table version 383
+26 network entries using 6448 bytes of memory
+26 path entries using 3536 bytes of memory
+2/2 BGP path/bestpath attribute entries using 560 bytes of memory
+2 BGP AS-PATH entries using 64 bytes of memory
+0 BGP route-map cache entries using 0 bytes of memory
+0 BGP filter-list cache entries using 0 bytes of memory
+BGP using 10608 total bytes of memory
+BGP activity 1217626/1217582 prefixes, 2905062/2905018 paths, scan interval 60 secs
+
+Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+10.8.2.225      4        64570 3199149 3199047      383    0    0 5y27w           1
+172.30.8.129    4        65534       0       0        1    0    0 never    Idle
+
+For address family: VPNv4 Unicast
+BGP router identifier 172.31.5.101, local AS number 64570
+BGP table version is 3525074, main routing table version 3525074
+18 network entries using 4608 bytes of memory
+18 path entries using 2448 bytes of memory
+1/1 BGP path/bestpath attribute entries using 296 bytes of memory
+2 BGP AS-PATH entries using 64 bytes of memory
+0 BGP route-map cache entries using 0 bytes of memory
+0 BGP filter-list cache entries using 0 bytes of memory
+BGP using 7416 total bytes of memory
+BGP activity 1217626/1217582 prefixes, 2905062/2905018 paths, scan interval 60 secs
+
+Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+10.8.1.103      4        64570       0       0        1    0    0 7w2d     Idle
+10.191.10.1     4        64601       0       0        1    0    0 26w0d    Idle
+10.191.10.17    4        64602       0       0        1    0    0 26w0d    Idle
+172.16.192.41   4        64518 30926295 24190074  3525074    0    0 5y1w           18
+172.17.17.2     4        15802       0       0        1    0    0 11w2d    Idle
+172.30.7.1      4        64812       0       0        1    0    0 4w2d     Idle
+172.30.7.86     4        15802       0       0        1    0    0 2d14h    Idle
+172.30.43.10    4        65666       0       0        1    0    0 2y17w    Idle
+192.168.204.53  4        64517       0       0        1    0    0 10w2d    Idle
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#!!!!!!!!!!
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#sh vrf 
+  Name                             Default RD            Protocols   Interfaces
+  ADX_DR                           64570:250             ipv4        Po1.495
+                                                                     Po2.3109
+  AMEX                             497:497               ipv4        Po1.497
+                                                                     Po2.3132
+                                                                     Tu17
+                                                                     Se0/1/2:10
+                                                                     Tu18
+                                                                     Po1.504
+  APOS                             508:508               ipv4        Po1.508
+                                                                     Po2.3100
+                                                                     Se0/1/2:8
+  B2BDU                            3132:3132             ipv4        
+  BAHRAIN_AFS                      64570:507             ipv4        Po1.507
+                                                                     Po2.3110
+                                                                     Se0/1/3:1
+  CB_ICCS                          64570:498             ipv4        Po1.498
+                                                                     Po2.3126
+  DFM                              510:510               ipv4        Po1.510
+                                                                     Po2.3134
+  DP                               64570:518             ipv4        Lo300
+                                                                     Po1.518
+                                                                     Po2.3127
+                                                                     Tu300
+                                                                     Tu301
+  DSG-COMTRUST                     64570:514             ipv4        Po1.514
+                                                                     Po2.3108
+  DUGTW                            492:492               ipv4        Po1.492
+                                                                     Se0/1/2:2
+  DU_APN                           491:491               ipv4        Po1.491
+                                                                     Po2.3124
+  DU_BULK_SMS                      520:520               ipv4        Po2.3111
+  EIDA                             513:513               ipv4        Po1.513
+                                                                     Po2.3103
+  Etisalat-3G                      64570:509             ipv4        Po1.509
+                                                                     Se0/1/4:1
+  MBIPATM                          496:496               ipv4        Lo100
+                                                                     Po1.496
+  Mgmt-intf                        <not set>             ipv4,ipv6   Gi0
+  NI_MERCURY                       100:3140              ipv4        Po1.580
+                                                                     Po2.3140
+  PLANETPAY                        505:505               ipv4        Po1.505
+                                                                     Po2.3106
+  RTASALIK                         493:493               ipv4        Po1.493
+                                                                     Po2.3123
+                                                                     Tu1
+  SMS_PUSH                         493:494               ipv4        Lo200
+                                                                     Po1.500
+                                                                     Po2.3107
+                                                                     Gi1/0/4
+  UAESW                            501:501               ipv4        Lo400
+                                                                     Po1.501
+                                                                     Se0/1/2:9
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#sh ip arp vrf DUGTW
+Protocol  Address          Age (min)  Hardware Addr   Type   Interface
+Internet  10.8.1.33              64   001c.7f48.0a6f  ARPA   Port-channel1.492
+Internet  10.8.1.34             117   001c.7f47.eca5  ARPA   Port-channel1.492
+Internet  10.8.1.35               0   001c.7f47.eca5  ARPA   Port-channel1.492
+Internet  10.8.1.37               -   54a2.7427.d590  ARPA   Port-channel1.492
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#sh run int  Port-channel1.492
+Building configuration...
+
+Current configuration : 221 bytes
+!
+interface Port-channel1.492
+ description *** DU PAYMENT GATEWAY-LAN ***
+ encapsulation dot1Q 492
+ ip vrf forwarding DUGTW
+ ip address 10.8.1.37 255.255.255.240
+ no ip redirects
+ no ip unreachables
+ no ip proxy-arp
+end
+
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#sh run int  Se0/1/2:2
+Building configuration...
+
+Current configuration : 243 bytes
+!
+interface Serial0/1/2:2
+ description ***DU PAYMENT AND SMS GW__W/O_REF#694984(TimeSlot-MB2,DU29)***
+ ip vrf forwarding DUGTW
+ ip address 172.22.244.45 255.255.255.252
+ no ip redirects
+ no ip unreachables
+ no ip proxy-arp
+ no cdp enable
+end
+
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#sh run
+DOZ-MB-EXT-NEW-RTR01#sh running-config | sec DUGTW
+ip vrf DUGTW
+ description *** DU PAY GATEWAY ***
+ rd 492:492
+ ip vrf forwarding DUGTW
+ ip vrf forwarding DUGTW
+ip route vrf DUGTW 172.20.182.244 255.255.255.255 172.22.244.46 name DU-PAYMNT-PEER
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01# 
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#sh vrf 
+  Name                             Default RD            Protocols   Interfaces
+  ADX_DR                           64570:250             ipv4        Po1.495
+                                                                     Po2.3109
+  AMEX                             497:497               ipv4        Po1.497
+                                                                     Po2.3132
+                                                                     Tu17
+                                                                     Se0/1/2:10
+                                                                     Tu18
+                                                                     Po1.504
+  APOS                             508:508               ipv4        Po1.508
+                                                                     Po2.3100
+                                                                     Se0/1/2:8
+  B2BDU                            3132:3132             ipv4        
+  BAHRAIN_AFS                      64570:507             ipv4        Po1.507
+                                                                     Po2.3110
+                                                                     Se0/1/3:1
+  CB_ICCS                          64570:498             ipv4        Po1.498
+                                                                     Po2.3126
+  DFM                              510:510               ipv4        Po1.510
+                                                                     Po2.3134
+  DP                               64570:518             ipv4        Lo300
+                                                                     Po1.518
+                                                                     Po2.3127
+                                                                     Tu300
+                                                                     Tu301
+  DSG-COMTRUST                     64570:514             ipv4        Po1.514
+                                                                     Po2.3108
+  DUGTW                            492:492               ipv4        Po1.492
+                                                                     Se0/1/2:2
+  DU_APN                           491:491               ipv4        Po1.491
+                                                                     Po2.3124
+  DU_BULK_SMS                      520:520               ipv4        Po2.3111
+  EIDA                             513:513               ipv4        Po1.513
+                                                                     Po2.3103
+  Etisalat-3G                      64570:509             ipv4        Po1.509
+                                                                     Se0/1/4:1
+  MBIPATM                          496:496               ipv4        Lo100
+                                                                     Po1.496
+  Mgmt-intf                        <not set>             ipv4,ipv6   Gi0
+  NI_MERCURY                       100:3140              ipv4        Po1.580
+                                                                     Po2.3140
+  PLANETPAY                        505:505               ipv4        Po1.505
+                                                                     Po2.3106
+  RTASALIK                         493:493               ipv4        Po1.493
+                                                                     Po2.3123
+                                                                     Tu1
+  SMS_PUSH                         493:494               ipv4        Lo200
+                                                                     Po1.500
+                                                                     Po2.3107
+                                                                     Gi1/0/4
+  UAESW                            501:501               ipv4        Lo400
+                                                                     Po1.501
+                                                                     Se0/1/2:9
+DOZ-MB-EXT-NEW-RTR01#!
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#sh ip arp vrf DU_APN
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#sh ip arp vrf DU_APN 
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#sh ip arp vrf DU_APN!!!!
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#$!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#
+DOZ-MB-EXT-NEW-RTR01#

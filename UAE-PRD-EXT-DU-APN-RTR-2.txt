@@ -1,0 +1,89 @@
+﻿UAE-PRD-EXT-DU-APN-RTR-2#
+UAE-PRD-EXT-DU-APN-RTR-2#
+UAE-PRD-EXT-DU-APN-RTR-2#
+UAE-PRD-EXT-DU-APN-RTR-2#
+UAE-PRD-EXT-DU-APN-RTR-2#sh int des
+UAE-PRD-EXT-DU-APN-RTR-2#sh int description 
+Interface                      Status         Protocol Description
+Gi0/0/0                        up             up       *** Du 3G ATM/POS Secondary Link ***
+Gi0/0/1                        admin down     down     
+Gi0/1/0                        up             up       
+Gi0/1/1                        down           down     
+Gi0/1/2                        down           down     
+Gi0/1/3                        down           down     
+Gi0/1/4                        down           down     
+Gi0/1/5                        down           down     
+Gi0/1/6                        up             up       
+Gi0/1/7                        up             up       
+Po10                           up             up       *** DU_APN LAN ***
+Vl1                            up             down     
+Vl1301                         up             up       ### OOB Management ###
+UAE-PRD-EXT-DU-APN-RTR-2#
+UAE-PRD-EXT-DU-APN-RTR-2#
+UAE-PRD-EXT-DU-APN-RTR-2#
+UAE-PRD-EXT-DU-APN-RTR-2#
+UAE-PRD-EXT-DU-APN-RTR-2#
+UAE-PRD-EXT-DU-APN-RTR-2#sh ip bgp all sum
+UAE-PRD-EXT-DU-APN-RTR-2#sh ip bgp all summary 
+For address family: IPv4 Unicast
+BGP router identifier 172.17.17.5, local AS number 64570
+BGP table version is 20, main routing table version 20
+19 network entries using 4712 bytes of memory
+19 path entries using 2584 bytes of memory
+6/6 BGP path/bestpath attribute entries using 1776 bytes of memory
+3 BGP AS-PATH entries using 120 bytes of memory
+0 BGP route-map cache entries using 0 bytes of memory
+0 BGP filter-list cache entries using 0 bytes of memory
+BGP using 9192 total bytes of memory
+BGP activity 19/0 prefixes, 19/0 paths, scan interval 60 secs
+19 networks peaked at 15:46:34 Jun 22 2026 UAE (00:55:07.615 ago)
+
+Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+172.17.17.6     4        15802  245185  227669       20    0    0 10w2d          16
+UAE-PRD-EXT-DU-APN-RTR-2#
+UAE-PRD-EXT-DU-APN-RTR-2#
+UAE-PRD-EXT-DU-APN-RTR-2#
+UAE-PRD-EXT-DU-APN-RTR-2#
+UAE-PRD-EXT-DU-APN-RTR-2#sh run
+UAE-PRD-EXT-DU-APN-RTR-2#sh running-config | sec bgp
+router bgp 64570
+ bgp log-neighbor-changes
+ neighbor 172.17.17.6 remote-as 15802
+ neighbor 172.17.17.6 local-as 64887
+ neighbor 172.17.17.6 description *** ebgp - DU 3G ATM\POS Secondary link ***
+ !
+ address-family ipv4
+  network 172.17.15.64 mask 255.255.255.192
+  network 172.17.17.0 mask 255.255.255.128
+  network 172.17.17.64 mask 255.255.255.192
+  neighbor 172.17.17.6 activate
+  neighbor 172.17.17.6 soft-reconfiguration inbound
+  neighbor 172.17.17.6 route-map Mashreq-DU_APN-OUT out
+ exit-address-family
+snmp-server view v1default cbgpPeer2CapValue excluded
+snmp-server view v1default cbgpPeer2AddrFamilyName excluded
+snmp-server view v1default cbgpPeer2AcceptedPrefixes excluded
+snmp-server enable traps bgp
+snmp-server enable traps bgp cbgp2
+UAE-PRD-EXT-DU-APN-RTR-2#
+UAE-PRD-EXT-DU-APN-RTR-2#
+UAE-PRD-EXT-DU-APN-RTR-2#
+UAE-PRD-EXT-DU-APN-RTR-2#sh run
+UAE-PRD-EXT-DU-APN-RTR-2#sh running-config | sec Mashreq-DU_APN-OUT
+  neighbor 172.17.17.6 route-map Mashreq-DU_APN-OUT out
+ip prefix-list Mashreq-DU_APN-OUT seq 5 permit 172.17.15.64/26
+ip prefix-list Mashreq-DU_APN-OUT seq 10 permit 172.17.17.64/26
+ip prefix-list Mashreq-DU_APN-OUT seq 15 permit 172.17.17.0/25
+route-map Mashreq-DU_APN-OUT permit 10 
+ match ip address prefix-list Mashreq-DU_APN-OUT
+ set as-path prepend 64887 64887 64887
+UAE-PRD-EXT-DU-APN-RTR-2#
+UAE-PRD-EXT-DU-APN-RTR-2#
+UAE-PRD-EXT-DU-APN-RTR-2#
+UAE-PRD-EXT-DU-APN-RTR-2#$!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!        
+UAE-PRD-EXT-DU-APN-RTR-2#
+UAE-PRD-EXT-DU-APN-RTR-2#
+UAE-PRD-EXT-DU-APN-RTR-2#
+UAE-PRD-EXT-DU-APN-RTR-2#
+UAE-PRD-EXT-DU-APN-RTR-2#
+UAE-PRD-EXT-DU-APN-RTR-2#exit

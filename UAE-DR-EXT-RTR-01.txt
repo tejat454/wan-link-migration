@@ -1,0 +1,652 @@
+﻿UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#sh vrf 
+  Name                             Default RD            Protocols   Interfaces
+  ADSM-ADX                         100:903               ipv4        Po2.765
+                                                                     Po3.902
+  AMEX_NEW                         100:901               ipv4        Po2.851
+                                                                     Po3.901
+                                                                     Tu17
+                                                                     Tu18
+  CB-ICCS                          100:742               ipv4        Po2.742
+                                                                     Po3.3120
+  DP                               100:768               ipv4        Lo300
+                                                                     Po2.737
+                                                                     Po3.768
+                                                                     Tu300
+                                                                     Tu301
+  DSG-COMTRUST                     100:764               ipv4        Po2.743
+                                                                     Po3.764
+  DU_APN                           100:760               ipv4        Po2.760
+                                                                     Po3.860
+  DU_BULK_SMS                      100:770               ipv4        Po2.778
+                                                                     Po3.770
+  EIDA                             100:762               ipv4        Po2.771
+                                                                     Po3.762
+  MBIPATM                          64555:64555           ipv4        Po2.749
+                                                                     Po3.4
+                                                                     Po3.862
+                                                                     Gi1/0/0
+                                                                     Gi1/0/1
+  Mgmt-intf                        <not set>             ipv4        Gi0/0/3
+                                                                     Te1/1/0
+                                                                     Te0/0/4
+  NI_MERCURY                       100:773               ipv4        Po2.772
+                                                                     Po3.773
+  SMSGW                            100:731               ipv4        Po2.744
+                                                                     Po3.731
+
+  Platform iVRF Name               iVRF Id               Interfaces
+  __Platform_iVRF:_ID00_           0                     LI0
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#sh ip apr vrf DP
+                         ^
+% Invalid input detected at '^' marker.
+
+UAE-DR-EXT-RTR-01#sh ip arp vrf DP
+Protocol  Address          Age (min)  Hardware Addr   Type   Interface
+Internet  10.29.2.17              0   001c.7f4a.4f22  ARPA   Port-channel2.737
+Internet  10.29.2.18            122   001c.7f4a.451a  ARPA   Port-channel2.737
+Internet  10.29.2.19            164   001c.7f4a.4f22  ARPA   Port-channel2.737
+Internet  10.29.2.20              -   9c66.9745.8af1  ARPA   Port-channel2.737
+Internet  172.30.7.9              8   ac4a.6751.d731  ARPA   Port-channel3.768
+Internet  172.30.7.10             -   9c66.9745.8af2  ARPA   Port-channel3.768
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#sh run int Port-channel3.768
+Building configuration...
+
+Current configuration : 325 bytes
+!
+interface Port-channel3.768
+ description ***E-WAN-DUBIA POLICE-ACCESS-A/C-1222274880-DATA-PORT-A/C-1222274885-MRWAN-A/C-1222274882-8MB-EMR2-P-Gi0/0/1.768***
+ encapsulation dot1Q 768
+ ip vrf forwarding DP
+ ip address 172.30.7.10 255.255.255.252
+ no ip redirects
+ no ip unreachables
+ no ip proxy-arp
+ ip local-proxy-arp
+end
+
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#sh ip bgp all sum
+UAE-DR-EXT-RTR-01#sh ip bgp all summary 
+For address family: VPNv4 Unicast
+BGP router identifier 172.30.9.3, local AS number 64555
+BGP table version is 272557, main routing table version 272557
+589 network entries using 155496 bytes of memory
+732 path entries using 99552 bytes of memory
+44/30 BGP path/bestpath attribute entries using 13728 bytes of memory
+25 BGP AS-PATH entries using 1048 bytes of memory
+5 BGP extended community entries using 136 bytes of memory
+0 BGP route-map cache entries using 0 bytes of memory
+0 BGP filter-list cache entries using 0 bytes of memory
+BGP using 269960 total bytes of memory
+121 received paths for inbound soft reconfiguration
+BGP activity 72061/71471 prefixes, 263241/262508 paths, scan interval 60 secs
+795 networks peaked at 17:33:22 Aug 15 2025 UAE (44w2d ago)
+
+Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+10.32.4.42      4        64555       0       0        1    0    0 never    Idle
+10.32.4.46      4        65534 3380495 2633345   272557    0    0 28w3d          90
+10.32.68.46     4        15802  798549  839611   272557    0    0 38w1d         103
+10.191.10.9     4        64601       0       0        1    0    0 26w0d    Idle
+10.191.10.25    4        64602       0       0        1    0    0 26w0d    Idle
+172.16.192.49   4        65534 6655581 5205744   272557    0    0 1y4w           18
+172.30.7.9      4        65534 6655627 5205580   272557    0    0 1y4w           10
+172.30.7.102    4        15802  769900  839627   272557    0    0 38w1d           7
+172.30.8.218    4        15802  769903  839531   272557    0    0 38w1d          14
+172.30.43.2     4        65666       0       0        1    0    0 never    Idle
+172.30.43.6     4        65666       0       0        1    0    0 never    Idle
+192.168.204.65  4        65534 3367066 2633281   272557    0    0 28w3d         361
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#sh ip route vrf DP
+
+Routing Table: DP
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area 
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, m - OMP
+       n - NAT, Ni - NAT inside, No - NAT outside, Nd - NAT DIA
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       H - NHRP, G - NHRP registered, g - NHRP registration summary
+       o - ODR, P - periodic downloaded static route, l - LISP
+       a - application route
+       + - replicated route, % - next hop override, p - overrides from PfR
+       & - replicated local route overrides by connected
+
+Gateway of last resort is not set
+
+      10.0.0.0/8 is variably subnetted, 8 subnets, 3 masks
+S        10.3.10.64/32 [1/0] via 10.29.2.17
+S        10.3.10.65/32 [1/0] via 10.29.2.17
+S        10.5.10.64/32 [1/0] via 10.29.2.17
+B        10.9.211.0/24 [20/0] via 172.30.7.9, 7w0d
+C        10.29.2.16/28 is directly connected, Port-channel2.737
+L        10.29.2.20/32 is directly connected, Port-channel2.737
+B        10.191.10.100/32 [20/0] via 172.30.7.9, 1d14h
+C        10.191.10.101/32 is directly connected, Loopback300
+      172.30.0.0/16 is variably subnetted, 8 subnets, 2 masks
+B        172.30.7.0/30 [20/0] via 172.30.7.9, 1d14h
+B        172.30.7.4/30 [20/0] via 172.30.7.9, 1d14h
+C        172.30.7.8/30 is directly connected, Port-channel3.768
+L        172.30.7.10/32 is directly connected, Port-channel3.768
+B        172.30.7.16/30 [20/0] via 172.30.7.9, 7w0d
+B        172.30.7.20/30 [20/0] via 172.30.7.9, 7w0d
+B        172.30.7.96/30 [20/0] via 172.30.7.9, 7w0d
+B        172.30.7.180/30 [20/0] via 172.30.7.9, 7w0d
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#sh run
+UAE-DR-EXT-RTR-01#sh running-config | sec bgp
+router bgp 64555
+ bgp log-neighbor-changes
+ !
+ address-family ipv4
+  network 172.30.9.3 mask 255.255.255.255
+ exit-address-family
+ !
+ address-family ipv4 vrf AMEX_NEW
+  network 10.29.3.8 mask 255.255.255.248
+  network 172.21.26.206 mask 255.255.255.255
+  neighbor 172.30.7.102 remote-as 15802
+  neighbor 172.30.7.102 local-as 65666
+  neighbor 172.30.7.102 activate
+  neighbor 172.30.7.102 soft-reconfiguration inbound
+  neighbor 172.30.43.2 remote-as 65666
+  neighbor 172.30.43.2 local-as 65667
+  neighbor 172.30.43.2 activate
+  neighbor 172.30.43.2 soft-reconfiguration inbound
+  neighbor 172.30.43.6 remote-as 65666
+  neighbor 172.30.43.6 local-as 65667
+  neighbor 172.30.43.6 activate
+  neighbor 172.30.43.6 soft-reconfiguration inbound
+ exit-address-family
+ !
+ address-family ipv4 vrf DP
+  network 10.3.10.64 mask 255.255.255.255
+  network 10.3.10.65 mask 255.255.255.255
+  network 10.5.10.64 mask 255.255.255.255
+  network 10.191.10.101 mask 255.255.255.255
+  neighbor 10.191.10.9 remote-as 64601
+  neighbor 10.191.10.9 description *** ebgp with LULU ***
+  neighbor 10.191.10.9 ebgp-multihop 255
+  neighbor 10.191.10.9 activate
+  neighbor 10.191.10.9 soft-reconfiguration inbound
+  neighbor 10.191.10.9 route-map LULU-OUT out
+  neighbor 10.191.10.25 remote-as 64602
+  neighbor 10.191.10.25 description *** ebgp with LULU ***
+  neighbor 10.191.10.25 ebgp-multihop 255
+  neighbor 10.191.10.25 activate
+  neighbor 10.191.10.25 soft-reconfiguration inbound
+  neighbor 10.191.10.25 route-map LULU-OUT-DR out
+  neighbor 172.30.7.9 remote-as 65534
+  neighbor 172.30.7.9 activate
+  neighbor 172.30.7.9 soft-reconfiguration inbound
+  neighbor 172.30.7.9 route-map DP-IN in
+  neighbor 172.30.7.9 route-map DP-OUT out
+ exit-address-family
+ !
+ address-family ipv4 vrf DSG-COMTRUST
+  neighbor 172.16.192.49 remote-as 65534
+  neighbor 172.16.192.49 activate
+  neighbor 172.16.192.49 soft-reconfiguration inbound
+  neighbor 172.16.192.49 route-map COMTRUST-DSG-Rcvd-Rts in
+ exit-address-family
+ !        
+ address-family ipv4 vrf EIDA
+  network 10.29.1.16 mask 255.255.255.240
+  neighbor 192.168.204.65 remote-as 65534
+  neighbor 192.168.204.65 activate
+  neighbor 192.168.204.65 soft-reconfiguration inbound
+ exit-address-family
+ !
+ address-family ipv4 vrf MBIPATM
+  network 10.40.50.0 mask 255.255.255.0
+  neighbor 10.32.4.42 remote-as 64555
+  neighbor 10.32.4.42 activate
+  neighbor 10.32.4.42 next-hop-self
+  neighbor 10.32.4.46 remote-as 65534
+  neighbor 10.32.4.46 activate
+  neighbor 10.32.4.46 soft-reconfiguration inbound
+  neighbor 10.32.4.46 route-map DU-ETISALAT-MPLS_ATM out
+  neighbor 10.32.68.46 remote-as 15802
+  neighbor 10.32.68.46 description DU_MPLS_OFFSITE_ATM
+  neighbor 10.32.68.46 password 7 0526071C295E4B1854213E315841527E7E717D
+  neighbor 10.32.68.46 activate
+  neighbor 10.32.68.46 soft-reconfiguration inbound
+  neighbor 10.32.68.46 route-map ETISALAT-DU-MPLS_ATM out
+ exit-address-family
+ !
+ address-family ipv4 vrf NI_MERCURY
+  neighbor 172.30.8.218 remote-as 15802
+  neighbor 172.30.8.218 description *** EBGP for NI MERCURY
+  neighbor 172.30.8.218 activate
+  neighbor 172.30.8.218 soft-reconfiguration inbound
+ exit-address-family
+snmp-server view v1default cbgpPeer2CapValue excluded
+snmp-server view v1default cbgpPeer2AddrFamilyName excluded
+snmp-server view v1default cbgpPeer2AcceptedPrefixes excluded
+snmp-server enable traps bgp
+snmp-server enable traps bgp cbgp2
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#!!
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#sh run
+UAE-DR-EXT-RTR-01#sh running-config | sec DP
+ip vrf DP
+ description **** Dubai Police ****
+ rd 100:768
+ ip vrf forwarding DP
+ ip vrf forwarding DP
+ ip vrf forwarding DP
+ ip vrf forwarding DP
+ tunnel vrf DP
+ ip vrf forwarding DP
+ tunnel vrf DP
+ address-family ipv4 vrf DP
+  network 10.3.10.64 mask 255.255.255.255
+  network 10.3.10.65 mask 255.255.255.255
+  network 10.5.10.64 mask 255.255.255.255
+  network 10.191.10.101 mask 255.255.255.255
+  neighbor 10.191.10.9 remote-as 64601
+  neighbor 10.191.10.9 description *** ebgp with LULU ***
+  neighbor 10.191.10.9 ebgp-multihop 255
+  neighbor 10.191.10.9 activate
+  neighbor 10.191.10.9 soft-reconfiguration inbound
+  neighbor 10.191.10.9 route-map LULU-OUT out
+  neighbor 10.191.10.25 remote-as 64602
+  neighbor 10.191.10.25 description *** ebgp with LULU ***
+  neighbor 10.191.10.25 ebgp-multihop 255
+  neighbor 10.191.10.25 activate
+  neighbor 10.191.10.25 soft-reconfiguration inbound
+  neighbor 10.191.10.25 route-map LULU-OUT-DR out
+  neighbor 172.30.7.9 remote-as 65534
+  neighbor 172.30.7.9 activate
+  neighbor 172.30.7.9 soft-reconfiguration inbound
+  neighbor 172.30.7.9 route-map DP-IN in
+  neighbor 172.30.7.9 route-map DP-OUT out
+ip route vrf DP 10.3.10.64 255.255.255.255 10.29.2.17 name POSTPNIX2
+ip route vrf DP 10.3.10.65 255.255.255.255 10.29.2.17 name POSTPNIX2
+ip route vrf DP 10.5.10.64 255.255.255.255 10.29.2.17 name POSTPNIX1
+ip prefix-list DP-IN seq 10 permit 10.3.10.65/32
+ip prefix-list DP-OUT seq 20 permit 10.191.10.101/32
+ip prefix-list DP-OUT seq 25 permit 10.3.10.64/32
+ip prefix-list DP-OUT-POSTILLION-DC seq 10 permit 10.3.10.65/32
+ip prefix-list DP-OUT-POSTILLION-DC seq 15 permit 10.5.10.64/32
+route-map DP-IN deny 10 
+ match ip address prefix-list DP-IN
+route-map DP-IN permit 20 
+route-map DP-OUT permit 10 
+ match ip address prefix-list DP-OUT
+route-map DP-OUT permit 20 
+ match ip address prefix-list DP-OUT-POSTILLION-DC
+ set as-path prepend 64555 64555 64555 64555
+UAE-DR-EXT-RTR-01#!
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#====================================================================================================
+% Unknown command or computer name, or unable to find computer address
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#sh ip arp vrf DSG-COMTRUST
+Protocol  Address          Age (min)  Hardware Addr   Type   Interface
+Internet  10.29.1.49              0   001c.7f4a.4f22  ARPA   Port-channel2.743
+Internet  10.29.1.50            233   001c.7f4a.451a  ARPA   Port-channel2.743
+Internet  10.29.1.51             32   001c.7f4a.4f22  ARPA   Port-channel2.743
+Internet  10.29.1.52              -   0000.0c9f.f2e7  ARPA   Port-channel2.743
+Internet  10.29.1.54              -   9c66.9745.8af1  ARPA   Port-channel2.743
+Internet  172.16.192.49          99   ac4a.6751.d731  ARPA   Port-channel3.764
+Internet  172.16.192.50           -   9c66.9745.8af2  ARPA   Port-channel3.764
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#sh run int Port-channel3.764
+Building configuration...
+
+Current configuration : 346 bytes
+!
+interface Port-channel3.764
+ description ***E-WAN-DSG-COMTRUST-A/C-1222274880-DATA-PORT-A/C-1222274095-MRWAN-A/C-1222274882-8MB-EMR2-P-Gi0/0/1.764***
+ encapsulation dot1Q 764
+ ip vrf forwarding DSG-COMTRUST
+ ip address 172.16.192.50 255.255.255.248
+ no ip redirects
+ no ip unreachables
+ no ip proxy-arp
+ ip local-proxy-arp
+ ip nat outside
+end
+
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#sh run
+UAE-DR-EXT-RTR-01#sh running-config | sec  DSG-COMTRUST
+ip vrf DSG-COMTRUST
+ description ### Dubai Smart Govt. Etisalat Comtrust Payment Gateway ###
+ rd 100:764
+ description ***LAN-DSG-COMTRUST***
+ ip vrf forwarding DSG-COMTRUST
+ description ***E-WAN-DSG-COMTRUST-A/C-1222274880-DATA-PORT-A/C-1222274095-MRWAN-A/C-1222274882-8MB-EMR2-P-Gi0/0/1.764***
+ ip vrf forwarding DSG-COMTRUST
+ address-family ipv4 vrf DSG-COMTRUST
+  neighbor 172.16.192.49 remote-as 65534
+  neighbor 172.16.192.49 activate
+  neighbor 172.16.192.49 soft-reconfiguration inbound
+  neighbor 172.16.192.49 route-map COMTRUST-DSG-Rcvd-Rts in
+ip nat inside source static 10.4.6.174 172.16.192.53 vrf DSG-COMTRUST
+ip nat inside source static 172.21.12.12 172.16.192.54 vrf DSG-COMTRUST
+ip route vrf DSG-COMTRUST 10.4.6.174 255.255.255.255 10.29.1.49 name CONNECT-DIRECT
+ip route vrf DSG-COMTRUST 10.4.6.175 255.255.255.255 10.29.1.49 name CONNECT-DIRECT
+ip route vrf DSG-COMTRUST 172.21.12.12 255.255.255.255 10.29.1.49 name Towards-Real1
+ip route vrf DSG-COMTRUST 172.24.12.12 255.255.255.255 10.29.1.49 name Towards-Real2
+ip route vrf DSG-COMTRUST 172.24.18.208 255.255.255.255 10.29.1.49 name Towards-FTP-COMTRUST
+ip access-list extended DSG-COMTRUST-NAT
+ 10 permit ip host 195.229.86.134 any
+ 20 deny ip any any
+  vrf DSG-COMTRUST
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#sh ip bgp all sum
+UAE-DR-EXT-RTR-01#sh ip bgp all summary 
+For address family: VPNv4 Unicast
+BGP router identifier 172.30.9.3, local AS number 64555
+BGP table version is 272557, main routing table version 272557
+589 network entries using 155496 bytes of memory
+732 path entries using 99552 bytes of memory
+44/30 BGP path/bestpath attribute entries using 13728 bytes of memory
+25 BGP AS-PATH entries using 1048 bytes of memory
+5 BGP extended community entries using 136 bytes of memory
+0 BGP route-map cache entries using 0 bytes of memory
+0 BGP filter-list cache entries using 0 bytes of memory
+BGP using 269960 total bytes of memory
+121 received paths for inbound soft reconfiguration
+BGP activity 72061/71471 prefixes, 263241/262508 paths, scan interval 60 secs
+795 networks peaked at 17:33:22 Aug 15 2025 UAE (44w2d ago)
+
+Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+10.32.4.42      4        64555       0       0        1    0    0 never    Idle
+10.32.4.46      4        65534 3380571 2633403   272557    0    0 28w3d          90
+10.32.68.46     4        15802  798562  839626   272557    0    0 38w1d         103
+10.191.10.9     4        64601       0       0        1    0    0 26w0d    Idle
+10.191.10.25    4        64602       0       0        1    0    0 26w0d    Idle
+172.16.192.49   4        65534 6655657 5205804   272557    0    0 1y4w           18
+172.30.7.9      4        65534 6655703 5205639   272557    0    0 1y4w           10
+172.30.7.102    4        15802  769913  839641   272557    0    0 38w1d           7
+172.30.8.218    4        15802  769916  839545   272557    0    0 38w1d          14
+172.30.43.2     4        65666       0       0        1    0    0 never    Idle
+172.30.43.6     4        65666       0       0        1    0    0 never    Idle
+192.168.204.65  4        65534 3367141 2633340   272557    0    0 28w3d         361
+UAE-DR-EXT-RTR-01#!!!!!!!!
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#sh vrf 
+  Name                             Default RD            Protocols   Interfaces
+  ADSM-ADX                         100:903               ipv4        Po2.765
+                                                                     Po3.902
+  AMEX_NEW                         100:901               ipv4        Po2.851
+                                                                     Po3.901
+                                                                     Tu17
+                                                                     Tu18
+  CB-ICCS                          100:742               ipv4        Po2.742
+                                                                     Po3.3120
+  DP                               100:768               ipv4        Lo300
+                                                                     Po2.737
+                                                                     Po3.768
+                                                                     Tu300
+                                                                     Tu301
+  DSG-COMTRUST                     100:764               ipv4        Po2.743
+                                                                     Po3.764
+  DU_APN                           100:760               ipv4        Po2.760
+                                                                     Po3.860
+  DU_BULK_SMS                      100:770               ipv4        Po2.778
+                                                                     Po3.770
+  EIDA                             100:762               ipv4        Po2.771
+                                                                     Po3.762
+  MBIPATM                          64555:64555           ipv4        Po2.749
+                                                                     Po3.4
+                                                                     Po3.862
+                                                                     Gi1/0/0
+                                                                     Gi1/0/1
+  Mgmt-intf                        <not set>             ipv4        Gi0/0/3
+                                                                     Te1/1/0
+                                                                     Te0/0/4
+  NI_MERCURY                       100:773               ipv4        Po2.772
+                                                                     Po3.773
+  SMSGW                            100:731               ipv4        Po2.744
+                                                                     Po3.731
+
+  Platform iVRF Name               iVRF Id               Interfaces
+  __Platform_iVRF:_ID00_           0                     LI0
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#sh ip arp vrf  AMEX_NEW
+Protocol  Address          Age (min)  Hardware Addr   Type   Interface
+Internet  10.29.3.9              72   001c.7f4a.451a  ARPA   Port-channel2.851
+Internet  10.29.3.10              5   001c.7f4a.4f22  ARPA   Port-channel2.851
+Internet  10.29.3.11              0   001c.7f4a.4f22  ARPA   Port-channel2.851
+Internet  10.29.3.13              -   9c66.9745.8af1  ARPA   Port-channel2.851
+Internet  172.30.7.101            -   9c66.9745.8af2  ARPA   Port-channel3.901
+Internet  172.30.7.102          112   407c.7d48.f8c3  ARPA   Port-channel3.901
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#sh run int Port-channel3.901
+Building configuration...
+
+Current configuration : 266 bytes
+!
+interface Port-channel3.901
+ description ***D-WAN-AMEX-CONTRACT-CONTR0079934494-512KB-DU-SW-C3K6-1 gig2/0/6***
+ encapsulation dot1Q 901
+ ip vrf forwarding AMEX_NEW
+ ip address 172.30.7.101 255.255.255.252
+ no ip redirects
+ no ip unreachables
+ no ip proxy-arp
+end
+
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#sh run
+UAE-DR-EXT-RTR-01#sh running-config | sec AMEX_NEW
+ip vrf AMEX_NEW
+ rd 100:901
+ description ***LAN-AMEX_NEW***
+ ip vrf forwarding AMEX_NEW
+ ip vrf forwarding AMEX_NEW
+ ip vrf forwarding AMEX_NEW
+ tunnel vrf AMEX_NEW
+ ip vrf forwarding AMEX_NEW
+ tunnel vrf AMEX_NEW
+ address-family ipv4 vrf AMEX_NEW
+  network 10.29.3.8 mask 255.255.255.248
+  network 172.21.26.206 mask 255.255.255.255
+  neighbor 172.30.7.102 remote-as 15802
+  neighbor 172.30.7.102 local-as 65666
+  neighbor 172.30.7.102 activate
+  neighbor 172.30.7.102 soft-reconfiguration inbound
+  neighbor 172.30.43.2 remote-as 65666
+  neighbor 172.30.43.2 local-as 65667
+  neighbor 172.30.43.2 activate
+  neighbor 172.30.43.2 soft-reconfiguration inbound
+  neighbor 172.30.43.6 remote-as 65666
+  neighbor 172.30.43.6 local-as 65667
+  neighbor 172.30.43.6 activate
+  neighbor 172.30.43.6 soft-reconfiguration inbound
+ip route vrf AMEX_NEW 172.21.26.206 255.255.255.255 10.29.3.11
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#sh ip bgp all sum
+UAE-DR-EXT-RTR-01#sh ip bgp all summary | i
+UAE-DR-EXT-RTR-01#sh ip bgp all summary | include 172.30.7
+172.30.7.9      4        65534 6655805 5205718   272557    0    0 1y4w           10
+172.30.7.102    4        15802  769931  839660   272557    0    0 38w1d           7
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#!!!!!!!!!!!!
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#sh vrf
+  Name                             Default RD            Protocols   Interfaces
+  ADSM-ADX                         100:903               ipv4        Po2.765
+                                                                     Po3.902
+  AMEX_NEW                         100:901               ipv4        Po2.851
+                                                                     Po3.901
+                                                                     Tu17
+                                                                     Tu18
+  CB-ICCS                          100:742               ipv4        Po2.742
+                                                                     Po3.3120
+  DP                               100:768               ipv4        Lo300
+                                                                     Po2.737
+                                                                     Po3.768
+                                                                     Tu300
+                                                                     Tu301
+  DSG-COMTRUST                     100:764               ipv4        Po2.743
+                                                                     Po3.764
+  DU_APN                           100:760               ipv4        Po2.760
+                                                                     Po3.860
+  DU_BULK_SMS                      100:770               ipv4        Po2.778
+                                                                     Po3.770
+  EIDA                             100:762               ipv4        Po2.771
+                                                                     Po3.762
+  MBIPATM                          64555:64555           ipv4        Po2.749
+                                                                     Po3.4
+                                                                     Po3.862
+                                                                     Gi1/0/0
+                                                                     Gi1/0/1
+  Mgmt-intf                        <not set>             ipv4        Gi0/0/3
+                                                                     Te1/1/0
+                                                                     Te0/0/4
+  NI_MERCURY                       100:773               ipv4        Po2.772
+                                                                     Po3.773
+  SMSGW                            100:731               ipv4        Po2.744
+                                                                     Po3.731
+
+  Platform iVRF Name               iVRF Id               Interfaces
+  __Platform_iVRF:_ID00_           0                     LI0
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#sh ip arp vrf  DU_APN
+Protocol  Address          Age (min)  Hardware Addr   Type   Interface
+Internet  10.29.2.65              0   001c.7f4a.4f22  ARPA   Port-channel2.760
+Internet  10.29.2.67            204   001c.7f4a.4f22  ARPA   Port-channel2.760
+Internet  10.29.2.68              -   0000.0c9f.f2f8  ARPA   Port-channel2.760
+Internet  10.29.2.69              -   9c66.9745.8af1  ARPA   Port-channel2.760
+Internet  172.17.16.1             -   9c66.9745.8af2  ARPA   Port-channel3.860
+Internet  172.17.16.2           198   407c.7d48.f6f7  ARPA   Port-channel3.860
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#sh run int  Port-channel3.860
+Building configuration...
+
+Current configuration : 330 bytes
+!
+interface Port-channel3.860
+ description ***D-WAN-DU_APN-DUPOS-CONTRACT-CONTR0031092284-512KB-DU-SW-C3K6-1 gig1/0/4***
+ bandwidth 2048
+ encapsulation dot1Q 860
+ ip vrf forwarding DU_APN
+ ip address 172.17.16.1 255.255.255.252
+ no ip redirects
+ no ip unreachables
+ no ip proxy-arp
+ ip ospf mtu-ignore
+ ip virtual-reassembly
+end
+
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#sh run
+UAE-DR-EXT-RTR-01#sh running-config | sec DU_APN
+ip vrf DU_APN
+ description *** DU_APN ***
+ rd 100:760
+ ip vrf forwarding DU_APN
+ description ***D-WAN-DU_APN-DUPOS-CONTRACT-CONTR0031092284-512KB-DU-SW-C3K6-1 gig1/0/4***
+ ip vrf forwarding DU_APN
+router ospf 3 vrf DU_APN
+ redistribute static route-map DU_3G_DIC_STATIC
+ network 172.17.16.1 0.0.0.0 area 1
+ip route vrf DU_APN 172.17.15.111 255.255.255.255 10.29.2.65 name GPRS_LAN_NAT_KDC_SERVER_POOL
+ip route vrf DU_APN 172.17.16.64 255.255.255.192 10.29.2.65 name DU_APN_GLOBAL_IN_DIC_IP
+ip route vrf DU_APN 172.17.17.128 255.255.255.128 10.29.2.65 name DU_APN_GLOBAL_IN_DIC_IP
+ip route vrf DU_APN 172.20.15.101 255.255.255.255 10.29.2.65 name NEW-TACACS
+ip route vrf DU_APN 172.21.49.7 255.255.255.255 10.29.2.65 name TACACS-ACCESS
+ip route vrf DU_APN 172.21.100.32 255.255.255.255 10.29.2.65 name DICNWSMGMTSRV
+ip route vrf DU_APN 172.24.22.183 255.255.255.255 10.29.2.65
+ip route vrf DU_APN 172.24.23.38 255.255.255.255 10.29.2.65 name Solarwind
+ip route vrf DU_APN 172.24.47.100 255.255.255.255 10.29.2.65 name DOZLMSSERVER
+ip route vrf DU_APN 172.24.47.200 255.255.255.255 10.29.2.65 name DOZNMSMGMTSRV
+ip route vrf DU_APN 172.24.47.250 255.255.255.255 10.29.2.65 name PSS
+ip access-list extended DU_APN_TEST
+ 10 permit udp any host 172.17.16.120 eq 1812 log
+ 20 permit udp any host 172.17.16.120 eq 1813 log
+ 30 permit ip any any
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#sh run
+UAE-DR-EXT-RTR-01#sh running-config | sec DU_3G_DIC_STATIC
+ redistribute static route-map DU_3G_DIC_STATIC
+ip access-list standard DU_3G_DIC_STATIC
+ 5 permit 172.17.15.111
+ 10 permit 172.17.16.64 0.0.0.63
+ 20 permit 172.17.17.128 0.0.0.127
+route-map DU_3G_DIC_STATIC permit 10 
+ match ip address DU_3G_DIC_STATIC
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#sh run int Port-channel2.760
+Building configuration...
+
+Current configuration : 305 bytes
+!
+interface Port-channel2.760
+ description ***LAN-DU POS-3G***
+ encapsulation dot1Q 760
+ ip vrf forwarding DU_APN
+ ip address 10.29.2.69 255.255.255.240
+ no ip redirects
+ no ip unreachables
+ no ip proxy-arp
+ standby version 2
+ standby 760 ip 10.29.2.68
+ standby 760 priority 110
+ standby 760 preempt
+end
+
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#$!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!     
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#
+UAE-DR-EXT-RTR-01#exit

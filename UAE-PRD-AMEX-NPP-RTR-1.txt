@@ -1,0 +1,193 @@
+﻿UAE-PRD-AMEX-NPP-RTR-1# 
+UAE-PRD-AMEX-NPP-RTR-1#
+UAE-PRD-AMEX-NPP-RTR-1#
+UAE-PRD-AMEX-NPP-RTR-1#
+UAE-PRD-AMEX-NPP-RTR-1#sh int description           
+Interface                      Status         Protocol Description
+Gi0/0/0                        up             up       **** AMEX NEW DU 512 Kbps MPLS LINK PRIMARY - CONTR0079934490 ****
+Gi0/0/1                        admin down     down     
+Gi0/1/0                        up             up       ###OOB-MGMT-CONNECTIVITY###
+Gi0/1/1                        down           down     
+Gi0/1/2                        down           down     
+Gi0/1/3                        down           down     
+Gi0/1/4                        down           down     
+Gi0/1/5                        down           down     
+Gi0/1/6                        up             up       ###CONNECTED TO UAE-PRD-EXT-AB60-IN-SW-1-Eth1/2###
+Gi0/1/7                        up             up       ###CONNECTED TO UAE-PRD-EXT-AB60-IN-SW-2-Eth1/2###
+Po10                           up             up       ### PORT-CHANNEL TO UAE-PRD-EXT-AB60-IN-SW ###
+Po10.497                       up             up       *** AMEX-LAN ***
+Po10.504                       up             up       *** NPP-LAN ***
+Tu17                           up             down     *** Primary tunnel to AMEX ***
+Tu18                           up             up       *** Primary tunnel to DXB-MB-NPP-RTR1 ***
+Vl1                            admin down     down     
+Vl1301                         up             up       ### OOB Management ###
+UAE-PRD-AMEX-NPP-RTR-1#
+UAE-PRD-AMEX-NPP-RTR-1#
+UAE-PRD-AMEX-NPP-RTR-1#sh ip int brief              
+Interface              IP-Address      OK? Method Status                Protocol
+GigabitEthernet0/0/0   172.30.7.85     YES manual up                    up      
+GigabitEthernet0/0/1   unassigned      YES NVRAM  administratively down down    
+GigabitEthernet0/1/0   unassigned      YES unset  up                    up      
+GigabitEthernet0/1/1   unassigned      YES unset  down                  down    
+GigabitEthernet0/1/2   unassigned      YES unset  down                  down    
+GigabitEthernet0/1/3   unassigned      YES unset  down                  down    
+GigabitEthernet0/1/4   unassigned      YES unset  down                  down    
+GigabitEthernet0/1/5   unassigned      YES unset  down                  down    
+GigabitEthernet0/1/6   unassigned      YES NVRAM  up                    up      
+GigabitEthernet0/1/7   unassigned      YES NVRAM  up                    up      
+Port-channel10         unassigned      YES unset  up                    up      
+Port-channel10.497     10.8.1.118      YES manual up                    up      
+Port-channel10.504     10.8.1.230      YES manual up                    up      
+Tunnel17               172.30.43.9     YES manual up                    down    
+Tunnel18               172.31.10.213   YES manual up                    up      
+Vlan1                  unassigned      YES unset  administratively down down    
+Vlan1301               172.20.1.41     YES NVRAM  up                    up      
+UAE-PRD-AMEX-NPP-RTR-1#
+UAE-PRD-AMEX-NPP-RTR-1#
+UAE-PRD-AMEX-NPP-RTR-1#
+UAE-PRD-AMEX-NPP-RTR-1#sh ip route        
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area 
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, m - OMP
+       n - NAT, Ni - NAT inside, No - NAT outside, Nd - NAT DIA
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       H - NHRP, G - NHRP registered, g - NHRP registration summary
+       o - ODR, P - periodic downloaded static route, l - LISP
+       a - application route
+       + - replicated route, % - next hop override, p - overrides from PfR
+       & - replicated local route overrides by connected
+
+Gateway of last resort is not set
+
+      10.0.0.0/8 is variably subnetted, 17 subnets, 2 masks
+S        10.4.6.84/32 [1/0] via 10.8.1.115
+S        10.4.6.85/32 [1/0] via 10.8.1.115
+C        10.8.1.112/28 is directly connected, Port-channel10.497
+L        10.8.1.118/32 is directly connected, Port-channel10.497
+C        10.8.1.224/28 is directly connected, Port-channel10.504
+L        10.8.1.230/32 is directly connected, Port-channel10.504
+S        10.129.10.57/32 [1/0] via 10.8.1.227
+S        10.129.10.64/32 [1/0] via 10.8.1.227
+S        10.129.10.65/32 [1/0] via 10.8.1.227
+S        10.133.6.174/32 [1/0] via 10.8.1.227
+S        10.133.10.64/32 [1/0] via 10.8.1.227
+S        10.133.10.65/32 [1/0] via 10.8.1.227
+S        10.133.10.66/32 [1/0] via 10.8.1.227
+S        10.210.9.5/32 [1/0] via 10.8.1.227
+S        10.210.16.200/32 [1/0] via 10.8.1.227
+S        10.216.51.201/32 [1/0] via 10.8.1.227
+S        10.228.49.201/32 [1/0] via 10.8.1.227
+      94.0.0.0/32 is subnetted, 1 subnets
+S        94.107.6.51 [20/0] via 10.8.1.120
+      172.17.0.0/16 is variably subnetted, 2 subnets, 2 masks
+S        172.17.6.0/24 is directly connected, Tunnel18
+S        172.17.255.255/32 [1/0] via 10.8.1.227
+      172.20.0.0/32 is subnetted, 2 subnets
+S        172.20.15.101 [1/0] via 10.8.1.227
+S        172.20.15.103 [1/0] via 10.8.1.227
+      172.21.0.0/32 is subnetted, 13 subnets
+S        172.21.23.44 [1/0] via 10.8.1.227
+S        172.21.26.50 [1/0] via 10.8.1.115
+S        172.21.26.51 [1/0] via 10.8.1.115
+S        172.21.26.52 [1/0] via 10.8.1.115
+S        172.21.26.94 [1/0] via 10.8.1.115
+S        172.21.26.96 [1/0] via 10.8.1.115
+S        172.21.26.105 [1/0] via 10.8.1.115
+S        172.21.26.172 [1/0] via 10.8.1.115
+S        172.21.26.173 [1/0] via 10.8.1.115
+S        172.21.49.74 [1/0] via 10.8.1.227
+S        172.21.49.75 [1/0] via 10.8.1.227
+S        172.21.100.32 [1/0] via 10.8.1.227
+S        172.21.200.101 [1/0] via 10.8.1.227
+      172.24.0.0/32 is subnetted, 9 subnets
+S        172.24.21.45 [1/0] via 10.8.1.227
+S        172.24.23.38 [1/0] via 10.8.1.227
+S        172.24.47.74 [1/0] via 10.8.1.227
+S        172.24.47.75 [1/0] via 10.8.1.227
+S        172.24.47.104 [1/0] via 10.8.1.227
+S        172.24.47.200 [1/0] via 10.8.1.227
+S        172.24.86.4 [1/0] via 10.8.1.227
+S        172.24.86.5 [1/0] via 10.8.1.227
+S        172.24.86.6 [1/0] via 10.8.1.227
+      172.30.0.0/16 is variably subnetted, 10 subnets, 2 masks
+C        172.30.7.84/30 is directly connected, GigabitEthernet0/0/0
+L        172.30.7.85/32 is directly connected, GigabitEthernet0/0/0
+B        172.30.7.88/30 [20/0] via 172.30.7.86, 2d14h
+S        172.30.7.89/32 [1/0] via 172.30.7.86
+B        172.30.7.96/30 [20/0] via 172.30.7.86, 2d14h
+B        172.30.7.128/30 [20/0] via 172.30.7.86, 2d14h
+S        172.30.7.130/32 [1/0] via 172.30.7.86
+B        172.30.7.132/30 [20/0] via 172.30.7.86, 2d14h
+B        172.30.10.206/32 [20/0] via 172.30.7.86, 2d14h
+B        172.30.10.207/32 [20/0] via 172.30.7.86, 2d14h
+      172.31.0.0/16 is variably subnetted, 2 subnets, 2 masks
+C        172.31.10.212/30 is directly connected, Tunnel18
+L        172.31.10.213/32 is directly connected, Tunnel18
+      192.168.50.0/32 is subnetted, 1 subnets
+S        192.168.50.40 [1/0] via 10.8.1.227
+UAE-PRD-AMEX-NPP-RTR-1#   
+UAE-PRD-AMEX-NPP-RTR-1#
+UAE-PRD-AMEX-NPP-RTR-1#
+UAE-PRD-AMEX-NPP-RTR-1#
+UAE-PRD-AMEX-NPP-RTR-1#show ip bgp all summary 
+For address family: IPv4 Unicast
+BGP router identifier 172.31.10.213, local AS number 64570
+BGP table version is 39, main routing table version 39
+10 network entries using 2480 bytes of memory
+10 path entries using 1360 bytes of memory
+4/4 BGP path/bestpath attribute entries using 1184 bytes of memory
+2 BGP AS-PATH entries using 80 bytes of memory
+0 BGP route-map cache entries using 0 bytes of memory
+0 BGP filter-list cache entries using 0 bytes of memory
+BGP using 5104 total bytes of memory
+BGP activity 24/14 prefixes, 24/14 paths, scan interval 60 secs
+10 networks peaked at 01:48:37 Jun 20 2026 UAE (2d14h ago)
+
+Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+172.30.7.86     4        15802    8839    8205       39    0    0 2d14h           7
+172.30.43.10    4        65666       0       0        1    0    0 never    Idle
+UAE-PRD-AMEX-NPP-RTR-1#
+UAE-PRD-AMEX-NPP-RTR-1#
+UAE-PRD-AMEX-NPP-RTR-1#
+UAE-PRD-AMEX-NPP-RTR-1#                             
+UAE-PRD-AMEX-NPP-RTR-1#
+UAE-PRD-AMEX-NPP-RTR-1#
+UAE-PRD-AMEX-NPP-RTR-1#!!!
+UAE-PRD-AMEX-NPP-RTR-1#
+UAE-PRD-AMEX-NPP-RTR-1#
+UAE-PRD-AMEX-NPP-RTR-1#sh running-config | sec bgp  
+UAE-PRD-AMEX-NPP-RTR-1#sh running-config | sec bgp  
+router bgp 64570
+ bgp log-neighbor-changes
+ neighbor 172.30.7.86 remote-as 15802
+ neighbor 172.30.7.86 local-as 65666
+ neighbor 172.30.43.10 remote-as 65666
+ neighbor 172.30.43.10 local-as 65667
+ !
+ address-family ipv4
+  network 10.8.1.112 mask 255.255.255.240
+  network 10.8.1.115 mask 255.255.255.255
+  network 172.21.26.96 mask 255.255.255.255
+  network 172.21.26.105 mask 255.255.255.255
+  neighbor 172.30.7.86 activate
+  neighbor 172.30.7.86 soft-reconfiguration inbound
+  neighbor 172.30.7.86 route-map AMEX_LAN out
+  neighbor 172.30.43.10 activate
+ exit-address-family
+snmp-server view v1default cbgpPeer2CapValue excluded
+snmp-server view v1default cbgpPeer2AddrFamilyName excluded
+snmp-server view v1default cbgpPeer2AcceptedPrefixes excluded
+snmp-server enable traps bgp state-changes all backward-trans limited updown-limited
+snmp-server enable traps bgp threshold prefix
+snmp-server enable traps bgp cbgp2 state-changes all backward-trans limited updown-limited
+snmp-server enable traps bgp cbgp2 threshold prefix
+UAE-PRD-AMEX-NPP-RTR-1#
+UAE-PRD-AMEX-NPP-RTR-1#
+UAE-PRD-AMEX-NPP-RTR-1#
+UAE-PRD-AMEX-NPP-RTR-1#$!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+UAE-PRD-AMEX-NPP-RTR-1#
+UAE-PRD-AMEX-NPP-RTR-1#
+UAE-PRD-AMEX-NPP-RTR-1#
+UAE-PRD-AMEX-NPP-RTR-1#exit
