@@ -1,0 +1,246 @@
+
+!
+hostname DOZ-MB-GPRS-RTR01
+!
+
+!
+!
+interface Tunnel11
+ description **** GPRS PRIMARY SITE TUNNEL TO AJH UPF GGSN (WILL BE ACTIVE PRIMARY-1 ONLY IF "M2q UPF GGSN" FAILS AT ETISALAT SIDE ***
+ bandwidth 102400
+ ip flow monitor ISR-MON input
+ ip flow monitor ISR-MON output
+ ip address 172.19.13.78 255.255.255.252
+ no ip redirects
+ no ip unreachables
+ no ip proxy-arp
+ load-interval 30
+ tunnel source 172.30.7.137
+ tunnel destination 172.31.0.18
+!
+interface Tunnel33
+ description **** GPRS SECONDARY SITE TUNNEL TO M2Q UPF GGSN (CURRENT ACTIVE PRIMARY-1 & "PRIMARY-1 BACKUP IS ON DOZ-MB-GPRS-RTR02-TU44" ) ***
+ bandwidth 102400
+ ip flow monitor ISR-MON input
+ ip flow monitor ISR-MON output
+ ip address 172.19.13.82 255.255.255.252
+ no ip redirects
+ no ip unreachables
+ no ip proxy-arp
+ load-interval 30
+ tunnel source 172.30.7.137
+ tunnel destination 172.31.0.50
+!
+interface GigabitEthernet0/0/0
+ description ++++ Connected to DOZ-MB-EXT-HDAA2-OUT WS-C3650- Gig 1/0/1 ++++
+ no ip address
+ negotiation auto
+ no cdp enable
+!
+interface GigabitEthernet0/0/0.509
+ description *** Etisalat-3G GPRS-LAN ***
+ encapsulation dot1Q 509
+ ip flow monitor ISR-MON input
+ ip flow monitor ISR-MON output
+ ip address 10.8.2.56 255.255.255.240
+ no ip redirects
+ no ip unreachables
+ no ip proxy-arp
+ standby 107 ip 10.8.2.53
+ standby 107 priority 170
+ standby 107 preempt
+!
+interface GigabitEthernet0/0/1
+ description ***BW 100 Mbps ACC#1444060833 - PORT#1444070819 - MARWAN#1444060873 ***
+ bandwidth 102400
+ ip flow monitor ISR-MON input
+ ip flow monitor ISR-MON output
+ ip address 172.30.7.137 255.255.255.252
+ no ip redirects
+ no ip unreachables
+ no ip proxy-arp
+ negotiation auto
+!
+interface GigabitEthernet0/0/2
+ no ip address
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet0
+ description ++++ Connected to DOZ-MB-OOB-SW1 WS-C3650- Gig 2/0/13 ++++
+ vrf forwarding Mgmt-intf
+ ip address 172.20.15.98 255.255.255.0
+ no ip redirects
+ no ip unreachables
+ no ip proxy-arp
+ negotiation auto
+ no cdp enable
+!
+router rip
+ version 2
+ redistribute static route-map RED_ROUTES
+ passive-interface GigabitEthernet0/0/1
+ network 172.30.0.0
+ no auto-summary
+!
+router bgp 64555
+ bgp router-id 172.30.7.137
+ bgp log-neighbor-changes
+ neighbor 10.8.2.57 remote-as 64555
+ neighbor 172.19.13.77 remote-as 65014
+ neighbor 172.19.13.81 remote-as 65014
+ !
+ address-family ipv4
+  network 172.17.15.64 mask 255.255.255.192
+  network 172.17.15.122 mask 255.255.255.255
+  network 172.17.17.0 mask 255.255.255.128
+  network 172.17.17.230 mask 255.255.255.255
+  network 172.17.17.232 mask 255.255.255.255
+  network 172.19.13.0 mask 255.255.255.0
+  neighbor 10.8.2.57 activate
+  neighbor 10.8.2.57 next-hop-self
+  neighbor 10.8.2.57 soft-reconfiguration inbound
+  neighbor 172.19.13.77 activate
+  neighbor 172.19.13.77 soft-reconfiguration inbound
+  neighbor 172.19.13.77 route-map LOCAL-PREFERENCE-T11 in
+  neighbor 172.19.13.77 route-map AS-PATH-PREPEND-T11 out
+  neighbor 172.19.13.81 activate
+  neighbor 172.19.13.81 soft-reconfiguration inbound
+  neighbor 172.19.13.81 route-map LOCAL-PREFERENCE-T33 in
+  neighbor 172.19.13.81 route-map AS-PATH-PREPEND-T33 out
+ exit-address-family
+!
+ip forward-protocol nd
+no ip http server
+ip http authentication local
+no ip http secure-server
+ip route 10.129.10.57 255.255.255.255 10.8.2.51 tag 100 name Tuffin
+ip route 10.129.10.64 255.255.255.255 10.8.2.51 tag 100 name Tuffin
+ip route 10.129.10.65 255.255.255.255 10.8.2.51 tag 100 name Tuffin
+ip route 10.133.10.64 255.255.255.255 10.8.2.51 tag 100 name Tuffin
+ip route 10.133.10.65 255.255.255.255 10.8.2.51 tag 100 name Tuffin
+ip route 10.133.10.66 255.255.255.255 10.8.2.51 tag 100 name Tuffin
+ip route 172.17.15.64 255.255.255.192 10.8.2.51 tag 100 name GPRS_LAN_NAT
+ip route 172.17.15.122 255.255.255.255 10.8.2.51 tag 100 name TMS_DIC_NAT_IP
+ip route 172.17.17.0 255.255.255.128 10.8.2.51 tag 100 name GPRS_LAN_NAT
+ip route 172.17.17.230 255.255.255.255 10.8.2.51 tag 100 name GPRS_LAN_NAT_DR_SOLIDCORE
+ip route 172.17.17.232 255.255.255.255 10.8.2.51 tag 100 name DR_SMTP
+ip route 172.17.97.89 255.255.255.255 172.30.7.138 name TRACK_17_DESTINATION
+ip route 172.19.13.72 255.255.255.252 172.30.7.138
+ip route 172.21.21.70 255.255.255.255 10.8.2.51 name SOLARWIND-DR
+ip route 172.21.23.44 255.255.255.255 10.8.2.51 name DR-ArcSight
+ip route 172.21.100.32 255.255.255.255 10.8.2.51 name DIC-MGMT
+ip route 172.24.23.38 255.255.255.255 10.8.2.51 name SOLARWIND
+ip route 172.24.47.104 255.255.255.255 10.8.2.51 name PRTG
+ip route 172.24.47.200 255.255.255.255 10.8.2.51 name DOZ-MGMT
+ip route 172.31.0.18 255.255.255.255 172.30.7.138 name AJH_UPF_GGSN_TUNNEL_DEST
+ip route 172.31.0.50 255.255.255.255 172.30.7.138 name M2Q_UPF_GGSN_TUNNEL_DEST
+ip route 172.31.1.12 255.255.255.255 172.30.7.138 name AUG_GGSN_TUNNEL_DEST
+ip route 172.31.2.7 255.255.255.255 172.30.7.138 name DXB_GGSN_TUNNEL_DEST
+ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 172.20.15.1 name OOB_DEFAULT_ROUTE
+!
+ip ssh version 2
+!
+!
+ip prefix-list POS-IP-POOL seq 5 permit 0.0.0.0/0 le 32
+!
+ip prefix-list SERVER-IP-POOL seq 5 permit 172.24.47.200/32
+ip prefix-list SERVER-IP-POOL seq 10 permit 172.17.15.64/26
+ip prefix-list SERVER-IP-POOL seq 15 permit 172.17.15.122/32
+ip prefix-list SERVER-IP-POOL seq 20 permit 172.17.17.0/25
+ip prefix-list SERVER-IP-POOL seq 25 permit 172.21.21.70/32
+ip prefix-list SERVER-IP-POOL seq 30 permit 172.21.23.44/32
+ip prefix-list SERVER-IP-POOL seq 35 permit 172.21.100.32/32
+ip prefix-list SERVER-IP-POOL seq 40 permit 172.24.23.38/32
+ip prefix-list SERVER-IP-POOL seq 45 permit 172.24.47.104/32
+ip prefix-list SERVER-IP-POOL seq 50 permit 172.17.17.230/32
+ip prefix-list SERVER-IP-POOL seq 55 permit 172.17.17.232/32
+ip prefix-list SERVER-IP-POOL seq 60 permit 172.17.17.231/32
+!
+ip access-list standard ADMIN_ACCESS
+ permit 172.24.21.172
+ permit 172.21.21.190
+ permit 172.24.22.183
+ permit 172.24.47.200
+ permit 172.24.23.38
+ permit 10.129.10.57
+ permit 10.129.10.65
+ permit 10.129.10.64
+ permit 10.133.10.65
+ permit 10.133.10.64
+ permit 10.133.10.66
+ permit 172.20.15.103
+ permit 172.21.21.70
+ permit 172.24.47.104
+ permit 172.21.100.32
+ deny   any log
+ip access-list standard MONITOR
+ permit 172.24.47.200
+ permit 172.24.23.38
+ permit 172.24.23.31
+ permit 172.20.15.103
+ permit 172.21.21.70
+ permit 172.24.47.104
+ permit 172.21.100.32
+ permit 172.24.47.100
+ deny   any log
+ip access-list standard RED_ROUTES
+ permit 172.17.17.122
+ permit 172.17.17.112
+ permit 172.17.17.115
+ip access-list standard TOOL
+ permit 172.24.22.183
+ permit 172.20.15.103
+ deny   any log
+!
+ip access-list extended GPRSPOOLTEST
+ permit ip 10.11.128.0 0.0.127.255 any
+ permit ip any 10.11.128.0 0.0.127.255
+ip access-list extended NEWSIM
+ permit ip any 10.11.0.0 0.0.15.255
+ permit ip 10.11.0.0 0.0.15.255 any
+ip access-list extended test
+ permit ip host 192.168.112.85 any log
+ permit ip any host 192.168.112.85 log
+ permit ip any any log
+ip sla 17
+ icmp-echo 172.19.13.77 source-ip 172.30.7.137
+ip sla schedule 17 life forever start-time now
+logging source-interface GigabitEthernet0 vrf Mgmt-intf
+logging host 172.21.100.32
+logging host 172.21.23.44
+logging host 172.24.21.58
+logging host 172.21.23.44 vrf Mgmt-intf
+logging host 172.21.100.32 vrf Mgmt-intf
+logging host 172.24.21.58 vrf Mgmt-intf
+access-list 42 permit 172.21.49.74
+access-list 42 permit 172.21.49.75
+access-list 42 permit 172.24.47.75
+access-list 42 permit 172.24.47.74
+access-list 99 permit 172.21.49.74
+access-list 99 permit 172.21.49.75
+access-list 99 permit 172.24.47.75
+access-list 99 permit 172.24.47.74
+!
+!
+route-map LOCAL-PREFERENCE-T11 permit 10 
+ match ip address prefix-list POS-IP-POOL
+ set local-preference 400
+!
+route-map LOCAL-PREFERENCE-T33 permit 10 
+ match ip address prefix-list POS-IP-POOL
+ set local-preference 500
+ set weight 200
+!
+route-map RED_ROUTES permit 10 
+ match tag 100
+!
+route-map AS-PATH-PREPEND-T11 permit 10 
+ description ****AS-PATH-PREPEND-T11-PRI****
+ match ip address prefix-list SERVER-IP-POOL
+ set as-path prepend 64555 64555 64555 64555 64555
+!
+route-map AS-PATH-PREPEND-T33 permit 10 
+ description ****AS-PATH-PREPEND-T33-PRI****
+ match ip address prefix-list SERVER-IP-POOL
+ set as-path prepend 64555 64555

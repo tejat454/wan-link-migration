@@ -1,0 +1,272 @@
+
+hostname UAE-PRD-EXT-GPRS-RTR2
+
+!
+!
+interface Port-channel10
+ description *** Etisalat-3G GPRS-LAN ***
+ ip flow monitor ISR-MON input
+ ip flow monitor ISR-MON output
+ ip address 10.8.2.57 255.255.255.240
+ no ip redirects
+ no ip unreachables
+ no ip proxy-arp
+ standby 107 ip 10.8.2.53
+ standby 107 priority 160
+ standby 107 preempt
+ no negotiation auto
+!
+interface Tunnel22
+ description **** GPRS PRIMARY TUNNEL TO AJH UPF GGSN (WILL BE ACTIVE IF PRIMARY ETISALAT (LINK/ROUTER-DOZ-MB-GPRS-RTR01) DOWN PLUS M2Q UPF GGSN (TU44) IS DOWN ****
+ bandwidth 102400
+ ip flow monitor ISR-MON input
+ ip flow monitor ISR-MON output
+ ip address 172.19.13.90 255.255.255.252
+ no ip redirects
+ no ip unreachables
+ no ip proxy-arp
+ load-interval 30
+ tunnel source 172.30.7.141
+ tunnel destination 172.31.0.18
+!
+interface Tunnel44
+ description **** GPRS SECONDARY TUNNEL TO M2Q UPF GGSN (BACKUP FOR PRIMARY-1 ON DOZ-MB-GPRS-RTR01-Tu33 - WILL BE active IF PRIMARY ETISALAT LINK IS DOWN) ***
+ bandwidth 102400
+ ip flow monitor ISR-MON input
+ ip flow monitor ISR-MON output
+ ip address 172.19.13.94 255.255.255.252
+ no ip redirects
+ no ip unreachables
+ no ip proxy-arp
+ load-interval 30
+ tunnel source 172.30.7.141
+ tunnel destination 172.31.0.50
+!
+interface GigabitEthernet0/0/0
+ description ***BW 100 Mbps ACC#1444060832 - PORT#1444070825 - MARWAN#1444060872 ***
+ bandwidth 102400
+ ip flow monitor ISR-MON input
+ ip flow monitor ISR-MON output
+ ip address 172.30.7.141 255.255.255.248
+ no ip redirects
+ no ip unreachables
+ no ip proxy-arp
+ negotiation auto
+!
+interface GigabitEthernet0/0/1
+ no ip address
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet0/1/0
+ switchport access vlan 1301
+ switchport mode access
+!
+interface GigabitEthernet0/1/1
+!
+interface GigabitEthernet0/1/2
+!
+interface GigabitEthernet0/1/3
+!
+interface GigabitEthernet0/1/4
+!
+interface GigabitEthernet0/1/5
+!
+interface GigabitEthernet0/1/6
+ no switchport
+ no ip address
+ negotiation auto
+ channel-group 10 mode active
+!
+interface GigabitEthernet0/1/7
+ no switchport
+ no ip address
+ negotiation auto
+ channel-group 10 mode active
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan1301
+ description ### OOB Management ###
+ vrf forwarding Mgmt-intf
+ ip address 172.20.1.66 255.255.255.0
+ no ip redirects
+ no ip unreachables
+ ip directed-broadcast
+ no ip proxy-arp
+!
+router rip
+ version 2
+ redistribute static route-map RED_ROUTES
+ passive-interface GigabitEthernet0/0/1
+ network 172.30.0.0
+ no auto-summary
+!
+router bgp 64555
+ bgp router-id 172.30.7.141
+ bgp log-neighbor-changes
+ neighbor 10.8.2.56 remote-as 64555
+ neighbor 172.19.13.89 remote-as 65014
+ neighbor 172.19.13.93 remote-as 65014
+ !
+ address-family ipv4
+  network 172.17.15.64 mask 255.255.255.192
+  network 172.17.15.122 mask 255.255.255.255
+  network 172.17.17.0 mask 255.255.255.128
+  network 172.17.17.231 mask 255.255.255.255
+  network 172.19.13.0 mask 255.255.255.0
+  neighbor 10.8.2.56 activate
+  neighbor 10.8.2.56 next-hop-self
+  neighbor 10.8.2.56 soft-reconfiguration inbound
+  neighbor 172.19.13.89 activate
+  neighbor 172.19.13.89 soft-reconfiguration inbound
+  neighbor 172.19.13.89 route-map LOCAL-PREFERENCE-T22 in
+  neighbor 172.19.13.89 route-map AS-PATH-PREPEND-T22 out
+  neighbor 172.19.13.93 activate
+  neighbor 172.19.13.93 soft-reconfiguration inbound
+  neighbor 172.19.13.93 route-map LOCAL-PREFERENCE-T44 in
+  neighbor 172.19.13.93 route-map AS-PATH-PREPEND-T44 out
+ exit-address-family
+!
+ip forward-protocol nd
+no ip forward-protocol udp tftp
+no ip forward-protocol udp domain
+no ip forward-protocol udp time
+no ip forward-protocol udp netbios-ns
+no ip forward-protocol udp netbios-dgm
+no ip forward-protocol udp tacacs
+ip tcp synwait-time 15
+ip tcp path-mtu-discovery
+no ip ftp passive
+no ip http server
+ip http authentication local
+no ip http secure-server
+ip http timeout-policy idle 60 life 43200 requests 1000 
+ip http client source-interface Vlan1301
+!
+ip route 10.129.10.57 255.255.255.255 10.8.2.51 name Tuffin
+ip route 10.129.10.64 255.255.255.255 10.8.2.51 name Tuffin
+ip route 10.129.10.65 255.255.255.255 10.8.2.51 name Tuffin
+ip route 10.133.10.64 255.255.255.255 10.8.2.51 name Tuffin
+ip route 10.133.10.65 255.255.255.255 10.8.2.51 name Tuffin
+ip route 10.133.10.66 255.255.255.255 10.8.2.51 name Tuffin
+ip route 172.17.15.64 255.255.255.192 10.8.2.51 tag 100 name GPRS_LAN_NAT
+ip route 172.17.15.122 255.255.255.255 10.8.2.51 tag 100 name TMS_DIC_NAT_IP
+ip route 172.17.17.0 255.255.255.128 10.8.2.51 tag 100 name GPRS_LAN_NAT
+ip route 172.17.17.231 255.255.255.255 10.8.2.51 tag 100 name DR_NVR
+ip route 172.19.13.84 255.255.255.252 172.30.7.142
+ip route 172.21.21.70 255.255.255.255 10.8.2.51 name SOLARWIND-DR
+ip route 172.21.23.44 255.255.255.255 10.8.2.51 name DR-ArcSight
+ip route 172.21.100.32 255.255.255.255 10.8.2.51 name DIC-MGMT-SRV
+ip route 172.24.23.38 255.255.255.255 10.8.2.51 name Netflow
+ip route 172.24.47.104 255.255.255.255 10.8.2.51 name PRTG-SRV
+ip route 172.24.47.200 255.255.255.255 10.8.2.51 name DOZ-MGMT-SRV
+ip route 172.31.0.18 255.255.255.255 172.30.7.142 name AJH_UPF_GGSN_TUNNEL_DEST
+ip route 172.31.0.50 255.255.255.255 172.30.7.142 name M2Q_UPF_GGSN_TUNNEL_DEST
+ip route 172.31.1.12 255.255.255.255 172.30.7.142 name AUG_GGSN_TUNNEL_DEST
+ip route 172.31.2.7 255.255.255.255 172.30.7.142 name DXB_GGSN_TUNNEL_DEST
+ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 172.20.1.1 name OOB-Default-Route
+ip ssh bulk-mode 131072
+ip ssh source-interface Vlan1301
+ip ssh server algorithm mac hmac-sha2-256 hmac-sha2-512
+ip ssh server algorithm encryption aes128-gcm@openssh.com aes256-gcm@openssh.com aes128-gcm aes256-gcm aes128-ctr aes192-ctr aes256-ctr
+ip ssh server algorithm kex curve25519-sha256@libssh.org ecdh-sha2-nistp256 ecdh-sha2-nistp384 ecdh-sha2-nistp521
+ip ssh server algorithm hostkey rsa-sha2-512 rsa-sha2-256
+ip ssh server algorithm publickey ecdsa-sha2-nistp256 ecdsa-sha2-nistp384 ecdsa-sha2-nistp521 ssh-ed25519 x509v3-ecdsa-sha2-nistp256 x509v3-ecdsa-sha2-nistp384 x509v3-ecdsa-sha2-nistp521 rsa-sha2-256 rsa-sha2-512
+ip ssh client algorithm mac hmac-sha2-256 hmac-sha2-512
+ip ssh client algorithm encryption aes128-gcm@openssh.com aes256-gcm@openssh.com aes128-gcm aes256-gcm aes128-ctr aes192-ctr aes256-ctr
+ip ssh client algorithm kex curve25519-sha256@libssh.org ecdh-sha2-nistp256 ecdh-sha2-nistp384 ecdh-sha2-nistp521
+!
+ip access-list standard ADMIN_ACCESS
+ 10 permit 172.24.151.44
+ 20 permit 172.24.47.200
+ 30 permit 172.24.23.38
+ 40 permit 172.20.15.103
+ 50 permit 172.21.21.70
+ 60 permit 172.24.23.31
+ 70 permit 172.24.47.104
+ 80 permit 172.21.100.32
+ 90 permit 172.24.22.183
+ 110 permit 10.216.6.6
+ 120 permit 172.24.132.153
+ 130 permit 172.24.132.154
+ 140 permit 172.21.133.104
+ 150 permit 10.129.10.57
+ 160 permit 10.129.10.64
+ 170 permit 10.129.10.65
+ 180 permit 10.133.10.66
+ 190 permit 10.133.10.64
+ 200 permit 10.133.10.65
+ 210 deny   any log
+ip access-list standard MONITOR
+ 10 permit 172.24.47.100
+ 20 permit 172.24.47.200
+ 30 permit 172.21.100.32
+ 40 permit 172.24.23.38
+ 50 permit 172.24.23.31
+ 60 permit 172.21.21.70
+ 70 permit 172.24.47.104
+ 80 deny   any log
+ip access-list standard TOOL
+ 10 permit 172.24.22.183
+ 20 permit 172.20.15.103
+ 30 permit 172.24.22.184
+ 40 deny   any log
+!
+!
+!
+ip prefix-list POS-IP-POOL seq 5 permit 0.0.0.0/0 le 32
+!
+ip prefix-list SERVER-IP-POOL seq 5 permit 172.24.47.200/32
+ip prefix-list SERVER-IP-POOL seq 10 permit 172.17.15.64/26
+ip prefix-list SERVER-IP-POOL seq 15 permit 172.17.15.122/32
+ip prefix-list SERVER-IP-POOL seq 20 permit 172.17.17.0/25
+ip prefix-list SERVER-IP-POOL seq 25 permit 172.21.21.70/32
+ip prefix-list SERVER-IP-POOL seq 30 permit 172.21.23.44/32
+ip prefix-list SERVER-IP-POOL seq 35 permit 172.21.100.32/32
+ip prefix-list SERVER-IP-POOL seq 40 permit 172.24.23.38/32
+ip prefix-list SERVER-IP-POOL seq 45 permit 172.24.47.104/32
+ip prefix-list SERVER-IP-POOL seq 50 permit 172.17.17.231/32
+logging history size 500
+logging trap debugging
+logging origin-id hostname
+logging source-interface Vlan1301 vrf Mgmt-intf
+logging host 172.21.100.32 vrf Mgmt-intf
+logging host 172.21.23.44 vrf Mgmt-intf
+logging host 172.24.21.58 vrf Mgmt-intf
+ip access-list standard 42
+ 10 permit 172.24.47.74
+ 20 permit 172.24.47.75
+ 30 permit 172.21.49.74
+ 40 permit 172.21.49.75
+ip access-list standard 99
+ 10 permit 172.24.47.74
+ 20 permit 172.24.47.75
+ 30 permit 172.21.49.74
+ 40 permit 172.21.49.75
+!
+route-map LOCAL-PREFERENCE-T44 permit 10 
+ match ip address prefix-list POS-IP-POOL
+ set local-preference 450
+ set weight 150
+!
+route-map AS-PATH-PREPEND-T22 permit 10 
+ description ****AS-PATH-PREPEND-T22-PRI****
+ match ip address prefix-list SERVER-IP-POOL
+ set as-path prepend 64555 64555 64555 64555 64555 64555
+!
+route-map AS-PATH-PREPEND-T44 permit 10 
+ description ****AS-PATH-PREPEND-T44-PRI****
+ match ip address prefix-list SERVER-IP-POOL
+ set as-path prepend 64555 64555 64555
+!
+route-map LOCAL-PREFERENCE-T22 permit 10 
+ match ip address prefix-list POS-IP-POOL
+ set local-preference 300
+ set weight 150
+!
+route-map RED_ROUTES permit 10 
+ match tag 100
+!
